@@ -357,7 +357,8 @@ def filter_network_by(g: nx.Graph, type="eigenvector", cutoff_score=None):
 
 
 def main():
-    data_dir = ""
+    lang = "german"
+    data_dir = ".././data/"
     window_size = 20
     r_path_base = pl.Path(data_dir) / "results"
     r_path_base.mkdir(exist_ok=True)
@@ -366,33 +367,33 @@ def main():
         text = f.read()
         tokens = text_to_tokens(text, lang=lang)
     for t_m, thresh in [("articles", 5000), ("terms", 500000)]:
-        r_path = r_path_base / (t_m + "_vectors")
-        r_path.mkdir(exist_ok=True)
-        graph_base = r_path / "graphs"
-        graph_base.mkdir(exist_ok=True)
+        # r_path = r_path_base / (t_m + "_vectors")
+        # r_path.mkdir(exist_ok=True)
+        # graph_base = r_path / "graphs"
+        # graph_base.mkdir(exist_ok=True)
         print("Extracting Network Table")
         if t_m == "terms":
             edge_df = text_to_network_table(tokens, db, window_size=window_size, map_tokens_to=t_m)
-            edge_df.to_csv(str(r_path / "edge_list.csv"))
+            # edge_df.to_csv(str(r_path / "edge_list.csv"))
             print("Filtering Graphs")
             c_n = edge_df_to_network(edge_df, thresh)
-            nx.write_gml(c_n, str(graph_base / "concept_graph.gml"))
+            # nx.write_gml(c_n, str(graph_base / "concept_graph.gml"))
             f_type = "core"
             e_step = 1
             for i in range(0, 5):
                 c_score = e_step * i
                 c_n_f = filter_network_by(c_n, type=f_type, cutoff_score=c_score)
-                graph_base.mkdir(exist_ok=True)
-                nx.write_gml(c_n_f, str(graph_base / "concept_graph_filtered_{}.gml".format(c_score)))
+                # graph_base.mkdir(exist_ok=True)
+                # nx.write_gml(c_n_f, str(graph_base / "concept_graph_filtered_{}.gml".format(c_score)))
         else:
             edge_df = text_to_network_table(tokens, db, window_size=window_size, map_tokens_to=t_m)
-            edge_df.to_csv(str(r_path / "edge_list.csv"))
+            # edge_df.to_csv(str(r_path / "edge_list.csv"))
             c_n = edge_df_to_network(edge_df, thresh)
-            nx.write_gml(c_n, str(graph_base / "concept_graph.gml"))
-            edge_df_fuzzy = text_to_network_table_fuzzy_articles(tokens, db, window_size=window_size)
-            edge_df_fuzzy.to_csv(str(r_path / "edge_list_fuzzy.csv"))
+            # nx.write_gml(c_n, str(graph_base / "concept_graph.gml"))
+            edge_df_fuzzy = text_to_network_table(tokens, db, window_size=window_size)
+            # edge_df_fuzzy.to_csv(str(r_path / "edge_list_fuzzy.csv"))
             c_n_fuzzy = edge_df_to_network_fuzzy(edge_df_fuzzy, thresh)
-            nx.write_gml(c_n_fuzzy, str(graph_base / "concept_graph_fuzzy.gml"))
+            # nx.write_gml(c_n_fuzzy, str(graph_base / "concept_graph_fuzzy.gml"))
             print("Filtering Graphs")
             f_type = "core"
             e_step = 1
@@ -400,9 +401,9 @@ def main():
                 c_score = e_step * i
                 c_n_f = filter_network_by(c_n, type=f_type, cutoff_score=c_score)
                 c_n_fuzzy_f = filter_network_by(c_n_fuzzy, type=f_type, cutoff_score=c_score)
-                graph_base.mkdir(exist_ok=True)
-                nx.write_gml(c_n_f, str(graph_base / "concept_graph_filtered_{}.gml".format(c_score)))
-                nx.write_gml(c_n_fuzzy_f, str(graph_base / "concept_graph_fuzzy_filtered_{}.gml".format(c_score)))
+                # graph_base.mkdir(exist_ok=True)
+                # nx.write_gml(c_n_f, str(graph_base / "concept_graph_filtered_{}.gml".format(c_score)))
+                # nx.write_gml(c_n_fuzzy_f, str(graph_base / "concept_graph_fuzzy_filtered_{}.gml".format(c_score)))
 
 
 if __name__ == "__main__":
