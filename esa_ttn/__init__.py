@@ -158,7 +158,7 @@ def text_to_tokens(text, lang="english"):
     return t_tokens
 
 
-def text_to_network_table(tokens, esa_db, window_size=10, map_tokens_to="terms"):
+def text_to_network_table(tokens, esa_db, window_size=10, map_tokens_to="terms", lang="english"):
     mtt_vals = ["terms", "articles"]
     if map_tokens_to not in mtt_vals:
         raise Exception("map_tokens_to needs to be one of the values: {}".format(mtt_vals))
@@ -357,6 +357,8 @@ def filter_network_by(g: nx.Graph, type="eigenvector", cutoff_score=None):
 
 
 def main():
+    data_dir = ""
+    window_size = 20
     r_path_base = pl.Path(data_dir) / "results"
     r_path_base.mkdir(exist_ok=True)
     db = ESA_DB(data_dir + "esa.db")
