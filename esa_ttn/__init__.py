@@ -288,13 +288,13 @@ def edge_df_to_network(df, score_cutoff=50000, mode="connecting_concepts"):
                 concept_graph.nodes[c_b]["nodetype"] = "text_concept"
             elif mode == "direct_connection":
                 if concept_graph.has_edge(c_a, c_b):
-                    concept_graph[n_a][n_b]["weight"] += 1
-                    concept_graph[n_a][n_b]["connecting_concepts"] = (
-                            concept_graph[n_a][n_b]["connecting_concepts"] +
+                    concept_graph[c_a][c_b]["weight"] += 1
+                    concept_graph[c_a][c_b]["connectingconcepts"] = (
+                            concept_graph[c_a][c_b]["connectingconcepts"] +
                             " "
                             + c_c)
                 else:
-                    concept_graph.add_edge(c_a, c_b, weight=1, connecting_concepts=c_c)
+                    concept_graph.add_edge(c_a, c_b, weight=1, connectingconcepts=c_c)
 
     return concept_graph
 
