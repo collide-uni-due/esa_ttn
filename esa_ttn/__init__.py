@@ -177,34 +177,35 @@ def text_to_network_table(tokens, esa_db, window_size=10, map_tokens_to="terms",
     print("-- Creating Edge Table")
     i = 0
     possible_edge_table = []
-    while True:
-        last_token = tokens[i]
-        last_token_vec = vectors[last_token]
-        begin = max(0, i - window_size)
-        rest_tokens = tokens[begin:i]
-        for r_token in rest_tokens:
-            if r_token == last_token:
-                continue
-            r_token_vec = vectors[r_token]
+    if len(tokens) != 0:
+        while True:
+            last_token = tokens[i]
+            last_token_vec = vectors[last_token]
+            begin = max(0, i - window_size)
+            rest_tokens = tokens[begin:i]
+            for r_token in rest_tokens:
+                if r_token == last_token:
+                    continue
+                r_token_vec = vectors[r_token]
 
-            if not r_token_vec or not last_token_vec:
-                continue
+                if not r_token_vec or not last_token_vec:
+                    continue
 
-            for k, v in r_token_vec.items():
+                for k, v in r_token_vec.items():
 
-                if k in last_token_vec:
-                    conn_score = v * last_token_vec[k]
-                    if map_tokens_to == "terms":
-                        t_prefix = "Term:"
-                        c_prefix = "Article:"
-                    else:
-                        t_prefix = "Article:"
-                        c_prefix = "Term:"
+                    if k in last_token_vec:
+                        conn_score = v * last_token_vec[k]
+                        if map_tokens_to == "terms":
+                            t_prefix = "Term:"
+                            c_prefix = "Article:"
+                        else:
+                            t_prefix = "Article:"
+                            c_prefix = "Term:"
 
-                    possible_edge_table.append((t_prefix + last_token, t_prefix + r_token, c_prefix + k, conn_score))
-        i += 1
-        if i >= len(vectors):
-            break
+                        possible_edge_table.append((t_prefix + last_token, t_prefix + r_token, c_prefix + k, conn_score))
+            i += 1
+            if i >= len(tokens):
+                break
 
     columns = ["token_a", "token_b", "connecting_concept", "tfidf_score"]
 
