@@ -147,6 +147,9 @@ class ESA_DB:
 
         return vectors, token_article_mapping
 
+    def close_connection(self):
+        self.conn.close()
+
 
 def text_to_tokens(text, lang="english"):
     sw = set(stopwords.words(lang))
