@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='esa_ttn',
-    version='0.1',
+    version='0.2',
     packages=['esa_ttn'],
     url='',
     license='MIT',
